@@ -1,6 +1,16 @@
-type ExampleEntity @entity {
+type Token @entity {
   id: ID!
-  count: BigInt!
-  owner: Bytes! # address
-  approved: Bytes! # address
+  #  metadataURI: String!
+  #  imgURI: String!
+  owner: Member!
+  createdAt: BigInt!
+}
+
+type Member @entity {
+  id: ID!
+  # ens: String
+  # edition: String
+  isActive: Boolean!
+  createdAt: BigInt!
+  tokens: [Token!]! @derivedFrom(field: "owner")
 }

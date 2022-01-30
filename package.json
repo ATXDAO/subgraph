@@ -2,15 +2,20 @@
   "name": "atx",
   "license": "UNLICENSED",
   "scripts": {
-    "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ atx",
+    "codegen": "graph codegen",
     "create-local": "graph create --node http://localhost:8020/ atx",
-    "remove-local": "graph remove --node http://localhost:8020/ atx",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 atx"
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ atx",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 atx",
+    "remove-local": "graph remove --node http://localhost:8020/ atx"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.26.0",
-    "@graphprotocol/graph-ts": "0.24.1"
+    "@graphprotocol/graph-ts": "0.24.1",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
+    "eslint": "^8.8.0",
+    "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.5.1"
   }
 }

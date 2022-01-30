@@ -1,4 +1,4 @@
-specVersion: 0.0.1
+specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
@@ -6,27 +6,19 @@ dataSources:
     name: ATXDAONFT_V2
     network: mainnet
     source:
-      address: "0x63f8F23ce0f3648097447622209E95A391c44b00"
+      address: '0x63f8F23ce0f3648097447622209E95A391c44b00'
       abi: ATXDAONFT_V2
+      startBlock: 14039452
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
-        - Approval
-        - ApprovalForAll
-        - OwnershipTransferred
         - Transfer
       abis:
         - name: ATXDAONFT_V2
           file: ./abis/ATXDAONFT_V2.json
       eventHandlers:
-        - event: Approval(indexed address,indexed address,indexed uint256)
-          handler: handleApproval
-        - event: ApprovalForAll(indexed address,indexed address,bool)
-          handler: handleApprovalForAll
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/mapping.ts
