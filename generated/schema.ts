@@ -15,9 +15,6 @@ export class Token extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("owner", Value.fromString(""));
-    this.set("createdAt", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -26,11 +23,14 @@ export class Token extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save Token entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type Token must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("Token", id.toString(), this);
     }
+  }
+
+  static loadInBlock(id: string): Token | null {
+    return changetype<Token | null>(store.get_in_block("Token", id));
   }
 
   static load(id: string): Token | null {
@@ -39,7 +39,11 @@ export class Token extends Entity {
 
   get id(): string {
     let value = this.get("id");
-    return value!.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -48,7 +52,11 @@ export class Token extends Entity {
 
   get owner(): string {
     let value = this.get("owner");
-    return value!.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set owner(value: string) {
@@ -57,7 +65,11 @@ export class Token extends Entity {
 
   get createdAt(): BigInt {
     let value = this.get("createdAt");
-    return value!.toBigInt();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
   }
 
   set createdAt(value: BigInt) {
@@ -69,9 +81,6 @@ export class Member extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
-
-    this.set("isActive", Value.fromBoolean(false));
-    this.set("createdAt", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -80,11 +89,14 @@ export class Member extends Entity {
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save Member entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type Member must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
       store.set("Member", id.toString(), this);
     }
+  }
+
+  static loadInBlock(id: string): Member | null {
+    return changetype<Member | null>(store.get_in_block("Member", id));
   }
 
   static load(id: string): Member | null {
@@ -93,7 +105,11 @@ export class Member extends Entity {
 
   get id(): string {
     let value = this.get("id");
-    return value!.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
   }
 
   set id(value: string) {
@@ -102,7 +118,11 @@ export class Member extends Entity {
 
   get isActive(): boolean {
     let value = this.get("isActive");
-    return value!.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
   }
 
   set isActive(value: boolean) {
@@ -111,19 +131,36 @@ export class Member extends Entity {
 
   get createdAt(): BigInt {
     let value = this.get("createdAt");
-    return value!.toBigInt();
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
   }
 
   set createdAt(value: BigInt) {
     this.set("createdAt", Value.fromBigInt(value));
   }
 
-  get tokens(): Array<string> {
-    let value = this.get("tokens");
-    return value!.toStringArray();
+  get tokens(): TokenLoader {
+    return new TokenLoader("Member", this.get("id")!.toString(), "tokens");
+  }
+}
+
+export class TokenLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
   }
 
-  set tokens(value: Array<string>) {
-    this.set("tokens", Value.fromStringArray(value));
+  load(): Token[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<Token[]>(value);
   }
 }
