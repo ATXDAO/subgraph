@@ -1,9 +1,8 @@
 type Token @entity {
   id: ID!
-  #  metadataURI: String!
-  #  imgURI: String!
   owner: Member!
   createdAt: BigInt!
+  tokenURI: String!
 }
 
 type Member @entity {

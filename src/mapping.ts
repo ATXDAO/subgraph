@@ -5,11 +5,14 @@ export function handleTransfer(event: Transfer): void {
   const params = event.params;
   const timestamp = event.block.timestamp;
 
+  const tokenContract = ATXDAONFT_V2.bind(event.address);
+
   // save token
   let token = Token.load(params.tokenId.toHex());
   if (!token) {
     token = new Token(params.tokenId.toHex());
     token.createdAt = timestamp;
+    token.tokenURI = tokenContract.tokenURI(params.tokenId);
   }
   token.owner = params.to.toHex();
   token.save();

@@ -75,6 +75,19 @@ export class Token extends Entity {
   set createdAt(value: BigInt) {
     this.set("createdAt", Value.fromBigInt(value));
   }
+
+  get tokenURI(): string {
+    let value = this.get("tokenURI");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set tokenURI(value: string) {
+    this.set("tokenURI", Value.fromString(value));
+  }
 }
 
 export class Member extends Entity {
