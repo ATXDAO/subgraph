@@ -1,8 +1,10 @@
 specVersion: 0.0.4
+description: ATX DAO Member Subgraph
+repository: https://github.com/atxdao/subgraph
 schema:
   file: ./schema.graphql
 dataSources:
-  - kind: ethereum
+  - kind: ethereum/contract
     name: ATXDAONFT_V2
     network: mainnet
     source:
